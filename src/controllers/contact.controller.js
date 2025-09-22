@@ -1,27 +1,31 @@
-import { validateContact } from "../utils/validate.js";
+// src/controllers/contact.controller.js
 import { saveContact } from "../services/contact.service.js";
 import { sendMail } from "../services/mail.service.js";
+import { validateContact } from "../utils/validate.js";
 
 export const handleContactForm = async (req, res) => {
   try {
-    const parsed = validateContact(req.body);
-    if (!parsed.ok) {
-      return res.status(400).json({ success: false, error: parsed.error });
-    }
-    const data = parsed.data;
-
-    try {
-      await saveContact(data); // nếu chưa config DB, hàm có thể no-op
-    } catch (dbErr) {
-      console.error("[contact] DB error:", dbErr);
-      // vẫn tiếp tục gửi email
+    const v = validateContact(req.body);
+    if (!v.ok) {
+      return res.status(400).json({ success: false, error: v.error });
     }
 
-    await sendMail(data);
+    await saveContact(v.data);       // có thể bỏ nếu không cần lưu
+    const mail = await sendMail(v.data);
 
-    return res.status(201).json({ success: true, message: "Contact saved & email sent!" });
+    return res.status(201).json({
+      success: true,
+      message: "Contact saved & email sent!",
+      mailId: mail.id,
+    });
   } catch (error) {
-    console.error("Error in contact:", error);
-    return res.status(500).json({ success: false, error: "Internal Server Error" });
+    // Log chi tiết để xem ở Vercel Functions logs
+    console.error("[contact] error:", error);
+    return res.status(502).json({
+      success: false,
+      error:
+        error?.message ||
+        "Email provider error (check RESEND_API_KEY / MAIL_FROM / Suppressions)",
+    });
   }
 };
