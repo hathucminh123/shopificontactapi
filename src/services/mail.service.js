@@ -43,7 +43,7 @@ export const sendMail = async (formData) => {
   `;
 
   await resend.emails.send({
-    from: process.env.MAIL_FROM || "Contact <no-reply@yourdomain.com>",
+    from: process.env.MAIL_FROM || "hathucminh456@gmail.com",
     to: process.env.TO_EMAIL || "sales@vsnr.com",
     subject: "New Contact Form Submission",
     html,
