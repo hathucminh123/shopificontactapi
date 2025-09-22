@@ -21,13 +21,13 @@ export const sendMail = async (formData) => {
         <tbody>
           <tr>
             <td style="padding:20px;">
-              <p style="font-size:15px;color:#333;margin:0 0 10px;"><b>Name:</b> ${name}</p>
-              <p style="font-size:15px;color:#333;margin:0 0 10px;"><b>Email:</b> ${email}</p>
-              <p style="font-size:15px;color:#333;margin:0 0 10px;"><b>Company:</b> ${company || "-"}</p>
-              <p style="font-size:15px;color:#333;margin:0 0 10px;"><b>Project Type:</b> ${projectType || "-"}</p>
-              <p style="font-size:15px;color:#333;margin:0 0 10px;"><b>Budget:</b> ${budget || "-"}</p>
-              <p style="font-size:15px;color:#333;margin:0 0 10px;"><b>Timeline:</b> ${timeline || "-"}</p>
-              <p style="font-size:15px;color:#333;margin:0 0 10px;"><b>Message:</b><br/>${message}</p>
+              <p><b>Name:</b> ${name}</p>
+              <p><b>Email:</b> ${email}</p>
+              <p><b>Company:</b> ${company || "-"}</p>
+              <p><b>Project Type:</b> ${projectType || "-"}</p>
+              <p><b>Budget:</b> ${budget || "-"}</p>
+              <p><b>Timeline:</b> ${timeline || "-"}</p>
+              <p><b>Message:</b><br/>${message}</p>
             </td>
           </tr>
         </tbody>
@@ -42,10 +42,16 @@ export const sendMail = async (formData) => {
     </div>
   `;
 
-  await resend.emails.send({
-    from: process.env.MAIL_FROM || "hathucminh456@gmail.com",
+  const result = await resend.emails.send({
+    from: process.env.MAIL_FROM || "onboarding@resend.dev",
     to: process.env.TO_EMAIL || "sales@vsnr.com",
     subject: "New Contact Form Submission",
     html,
   });
+
+  console.log("[Resend] result:", result);
+
+  if (result.error) {
+    throw new Error(`Resend error: ${result.error.message}`);
+  }
 };
