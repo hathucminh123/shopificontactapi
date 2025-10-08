@@ -1,53 +1,80 @@
-// // src/controllers/contact.controller.js
-// import { saveContact } from "../services/contact.service.js";
-// import { sendMail } from "../services/mail.service.js";
-// import { validateContact } from "../utils/validate.js";
+import { ContactService } from "../services/contact.service.js";
 
-// export const handleContactForm = async (req, res) => {
-//   try {
-//     const v = validateContact(req.body);
-//     if (!v.ok) {
-//       return res.status(400).json({ success: false, error: v.error });
-//     }
+export const ContactController = {
+  // 🧩 Get all contacts (with related email sequences & downloads)
+  async getAll(req, res) {
+    try {
+      const contacts = await ContactService.getAll();
+      return res.status(200).json({
+        message: "Contacts fetched successfully",
+        contacts,
+      });
+    } catch (error) {
+      console.error("❌ Error fetching contacts:", error);
+      return res.status(500).json({ error: error.message });
+    }
+  },
 
-//     await saveContact(v.data);       // có thể bỏ nếu không cần lưu
-//     const mail = await sendMail(v.data);
+  // 🔍 Get one contact by ID
+  async getById(req, res) {
+    try {
+      const contact = await ContactService.getById(req.params.id);
+      if (!contact)
+        return res.status(404).json({ error: "Contact not found" });
 
-//     return res.status(201).json({
-//       success: true,
-//       message: "Contact saved & email sent!",
-//       mailId: mail.id,
-//     });
-//   } catch (error) {
-//     // Log chi tiết để xem ở Vercel Functions logs
-//     console.error("[contact] error:", error);
-//     return res.status(502).json({
-//       success: false,
-//       error:
-//         error?.message ||
-//         "Email provider error (check RESEND_API_KEY / MAIL_FROM / Suppressions)",
-//     });
-//   }
-// };
+      return res.status(200).json(contact);
+    } catch (error) {
+      console.error("❌ Error fetching contact:", error);
+      return res.status(500).json({ error: error.message });
+    }
+  },
 
-// src/controllers/contact.controller.js
-import { saveContact } from "../services/contact.service.js";
-import { sendMail } from "../services/mail.service.js";
+  // ✉️ Create new contact & send email notification
+  async create(req, res) {
+    try {
+      const { name, email, message } = req.body;
 
-export const handleContactForm = async (req, res) => {
-  try {
-    const data = req.body;
+      // Basic validation (optional, improves DX)
+      if (!name || !email || !message) {
+        return res
+          .status(400)
+          .json({ error: "Name, email, and message are required" });
+      }
 
-    // lưu DB
-    await saveContact(data);
+      const newContact = await ContactService.create(req.body);
 
-    // gửi mail
-    await sendMail(data);
+      return res.status(201).json({
+        message: "Contact form submitted successfully",
+        contact: newContact,
+      });
+    } catch (error) {
+      console.error("❌ Error creating contact:", error);
+      return res.status(500).json({ error: error.message });
+    }
+  },
 
-    res.json({ success: true, message: "Contact saved & email sent!" });
-  } catch (error) {
-    console.error("Error in contact:", error);
-    res.status(500).json({ success: false, error: "Internal Server Error" });
-  }
+  // ✏️ Update contact info
+  async update(req, res) {
+    try {
+      const updated = await ContactService.update(req.params.id, req.body);
+      return res.status(200).json({
+        message: "Contact updated successfully",
+        contact: updated,
+      });
+    } catch (error) {
+      console.error("❌ Error updating contact:", error);
+      return res.status(400).json({ error: error.message });
+    }
+  },
+
+  // 🗑️ Delete a contact
+  async delete(req, res) {
+    try {
+      const result = await ContactService.delete(req.params.id);
+      return res.status(200).json(result);
+    } catch (error) {
+      console.error("❌ Error deleting contact:", error);
+      return res.status(400).json({ error: error.message });
+    }
+  },
 };
-

@@ -1,14 +1,22 @@
 import dotenv from "dotenv";
+import { Sequelize } from "sequelize";
+
 dotenv.config();
 
-import pkg from "pg";
-const { Pool } = pkg;
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "postgres",
+  logging: process.env.NODE_ENV === "development" ? console.log : false,
+  dialectOptions: {
+    ssl:
+      process.env.NODE_ENV === "production"
+        ? { require: true, rejectUnauthorized: false }
+        : false,
+  },
+});
 
-const pool = process.env.DATABASE_URL
-  ? new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
-    })
-  : null;
+sequelize
+  .authenticate()
+  .then(() => console.log("✅ PostgreSQL connected successfully"))
+  .catch((err) => console.error("❌ Database connection error:", err));
 
-export default pool;
+export default sequelize;

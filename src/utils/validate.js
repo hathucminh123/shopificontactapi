@@ -27,3 +27,22 @@ export const validateContact = (body) => {
     },
   };
 };
+
+// Example middleware (Express)
+export const canManageResource = (req, res, next) => {
+  const user = req.user; // from JWT
+  if (user.role_id === 1 || user.role_id === 3) return next(); // Admin or Marketing
+  return res.status(403).json({ error: "Access denied" });
+};
+
+export const canManageCaseStudy = (req, res, next) => {
+  const user = req.user;
+  if (user.role_id === 1 || user.role_id === 2 || user.role_id === 3) return next(); // Admin, Editor, Marketing
+  return res.status(403).json({ error: "Access denied" });
+};
+
+export const canManageBlog = (req, res, next) => {
+  const { role_id } = req.user;
+  if ([1, 2, 3].includes(role_id)) return next(); // admin, editor, marketing
+  return res.status(403).json({ error: "Access denied" });
+};
