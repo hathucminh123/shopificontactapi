@@ -4,18 +4,24 @@ import pg from "pg";
 
 dotenv.config();
 
-const isProduction = process.env.NODE_ENV === "production";
-
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
   dialectModule: pg,
-  logging: isProduction ? false : console.log,
+  logging: process.env.NODE_ENV === "production" ? false : console.log,
   dialectOptions: {
-    ssl: isProduction
-      ? { require: true, rejectUnauthorized: false } // Neon
-      : false, // Local
+    ssl: {
+      require: true,
+      rejectUnauthorized: false, // cần cho Neon SSL
+    },
   },
-  define: { schema: "public" },
+  define: {
+    schema: "public", // Neon luôn dùng schema public
+  },
 });
+
+sequelize
+  .authenticate()
+  .then(() => console.log("✅ PostgreSQL connected successfully"))
+  .catch((err) => console.error("❌ Database connection error:", err));
 
 export default sequelize;
