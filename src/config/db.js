@@ -12,17 +12,10 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   logging: isProduction ? false : console.log,
   dialectOptions: {
     ssl: isProduction
-      ? { require: true, rejectUnauthorized: false }
-      : false,
+      ? { require: true, rejectUnauthorized: false } // Neon
+      : false, // Local
   },
-  define: {
-    schema: "public", // ✅ Quan trọng: ép Sequelize tạo bảng ở public
-  },
+  define: { schema: "public" },
 });
-
-sequelize
-  .authenticate()
-  .then(() => console.log("✅ PostgreSQL connected successfully"))
-  .catch((err) => console.error("❌ Database connection error:", err));
 
 export default sequelize;

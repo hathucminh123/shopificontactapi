@@ -1,6 +1,4 @@
 import sequelize from "../config/db.js";
-
-// 🧱 Import models
 import Role from "./role.model.js";
 import User from "./users.model.js";
 import BlogPost from "./blogPost.model.js";
@@ -10,15 +8,12 @@ import EmailSequence from "./emailSequence.model.js";
 import ResourceDownload from "./resourceDownload.model.js";
 import Contact from "./contact.model.js";
 
-// 🚀 Hàm khởi tạo database
 const initDatabase = async () => {
   try {
-    // 1️⃣ Kiểm tra kết nối
     await sequelize.authenticate();
     console.log("✅ Database connection established");
 
-    // 2️⃣ Sync theo thứ tự quan hệ
-    // (Role → User → BlogPost → các bảng khác)
+    // ⚡ Thứ tự sync theo quan hệ
     await Role.sync({ alter: true });
     await User.sync({ alter: true });
     await BlogPost.sync({ alter: true });

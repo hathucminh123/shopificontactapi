@@ -5,9 +5,12 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
-await initDatabase();
+// await initDatabase();
 app.get("/", (req, res) => res.send("🚀 VSNR API running with Role → User (1:N)"));
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+(async () => {
+  await initDatabase(); // 🧩 Tạo bảng / sync DB
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+})();
