@@ -9,15 +9,14 @@ const isProduction = process.env.NODE_ENV === "production";
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
   dialectModule: pg,
-logging: isProduction ? false : console.log,
- // log SQL khi ở dev
+  logging: isProduction ? false : console.log,
   dialectOptions: {
     ssl: isProduction
       ? { require: true, rejectUnauthorized: false }
       : false,
   },
   define: {
-    schema: "public", // 🔒 tránh lỗi schema trên Neon
+    schema: "public", // ✅ Quan trọng: ép Sequelize tạo bảng ở public
   },
 });
 
