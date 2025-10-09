@@ -1,16 +1,18 @@
-import app from "./app.js";
 import dotenv from "dotenv";
+import app from "./app.js";
 import { initDatabase } from "./models/index.js";
+
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
-// await initDatabase();
-app.get("/", (req, res) => res.send("🚀 VSNR API running with Role → User (1:N)"));
-
 (async () => {
-  await initDatabase(); // 🧩 Tạo bảng / sync DB
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-  });
+  try {
+    await initDatabase(); // 🧩 Tạo bảng / sync DB một lần duy nhất
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Failed to initialize server:", error);
+  }
 })();
