@@ -2,6 +2,7 @@
 import serverless from "serverless-http";
 import app from "../src/app.js";
 import { initDatabase } from "../src/models/index.js";
+// import "./jobs/sendScheduledEmails.js";
 initDatabase();
  // app đã mount /api/contact
 initDatabase();

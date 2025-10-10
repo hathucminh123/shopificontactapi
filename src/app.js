@@ -11,7 +11,7 @@ import caseRoutes from "./routes/caseStudy.routes.js";
 import resourceRoutes from "./routes/resource.routes.js";
 import emailSequenceRoutes from "./routes/emailSequence.routes.js";
 import resourceDownloadRoutes from "./routes/resourceDownload.routes.js";
-
+import "./jobs/sendScheduledEmails.js";
 const app = express();
 
 // Middleware

@@ -16,6 +16,8 @@ const EmailSequence = sequelize.define(
     status: { type: DataTypes.STRING, defaultValue: "scheduled" },
     scheduled_at: DataTypes.DATE,
     sent_at: DataTypes.DATE,
+    attempts: { type: DataTypes.INTEGER, defaultValue: 0 }, // retry count
+    last_error: { type: DataTypes.TEXT }, // store last error message
     created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   },
   { tableName: "email_sequences", timestamps: false }

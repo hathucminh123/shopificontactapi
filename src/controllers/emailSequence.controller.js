@@ -46,4 +46,24 @@ export const EmailSequenceController = {
       res.status(400).json({ error: error.message });
     }
   },
+
+  async startSequence(req, res) {
+    try {
+      const { contactId, sequenceType } = req.body;
+      const result = await EmailSequenceService.startSequence(contactId, sequenceType);
+      res.status(201).json(result);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  },
+
+  async reschedule(req, res) {
+    try {
+      const { newDate } = req.body;
+      const result = await EmailSequenceService.reschedule(req.params.id, newDate);
+      res.json(result);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  },
 };
