@@ -11,6 +11,10 @@ import caseRoutes from "./routes/caseStudy.routes.js";
 import resourceRoutes from "./routes/resource.routes.js";
 import emailSequenceRoutes from "./routes/emailSequence.routes.js";
 import resourceDownloadRoutes from "./routes/resourceDownload.routes.js";
+import projectRoutes from "./routes/project.routes.js";
+import projectTaskRoutes from "./routes/projectTask.routes.js";
+import projectTeamRoutes from "./routes/projectTeam.routes.js";
+import projectResourceRoutes from "./routes/projectResource.routes.js";
 import "./jobs/sendScheduledEmails.js";
 const app = express();
 
@@ -34,5 +38,10 @@ app.use("/api/case-studies", caseRoutes);
 app.use("/api/resources", resourceRoutes);
 app.use("/api/email-sequences", emailSequenceRoutes);
 app.use("/api/resource-downloads", resourceDownloadRoutes);
+// Project Tasks
+app.use("/api/projects", projectRoutes);
+app.use("/api", projectTaskRoutes);
+app.use("/api/team", projectTeamRoutes);
+app.use("/api/project-resources", projectResourceRoutes);
 
 export default app;
