@@ -26,6 +26,22 @@ const BlogPost = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+ 
+      KeyInsights:{
+  type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    Implementation:{
+  type: DataTypes.TEXT,
+      allowNull: false,
+    },
+      Conclusion:{
+  type: DataTypes.TEXT,
+      allowNull: false,
+    },
+
+
+
     category: {
       type: DataTypes.STRING,
       allowNull: true,
