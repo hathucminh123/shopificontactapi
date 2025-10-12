@@ -14,7 +14,7 @@ export const BlogPostController = {
     try {
       const blog = await BlogPostService.getById(req.params.id);
       if (!blog) return res.status(404).json({ error: "Not found" });
-      res.json(blog);
+      res.json({blogPost:blog});
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
