@@ -19,6 +19,15 @@ export const BlogPostController = {
       res.status(500).json({ error: err.message });
     }
   },
+ async getBySlug(req, res) {
+    try {
+      const blog = await BlogPostService.getBySlug(req.params.slug);
+      if (!blog) return res.status(404).json({ error: "Blog not found" });
+      res.json({ blogPost: blog });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
 
   async create(req, res) {
     try {

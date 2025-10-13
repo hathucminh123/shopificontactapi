@@ -8,6 +8,12 @@ export const BlogPostService = {
   async getById(id) {
     return BlogPost.findByPk(id, { include: ["author"] });
   },
+    async getBySlug(slug) {
+    return BlogPost.findOne({
+      where: { slug },
+      include: ["author"],
+    });
+  },
 
   async create(data) {
     return BlogPost.create(data);

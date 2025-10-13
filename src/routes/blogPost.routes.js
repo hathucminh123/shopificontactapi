@@ -8,7 +8,7 @@ const router = express.Router();
 // 🔓 Public
 router.get("/", BlogPostController.getAll);
 router.get("/:id", BlogPostController.getById);
-
+router.get("/slug/:slug", BlogPostController.getBySlug);
 // 🔒 Protected (only Admin, Editor)
 router.post("/", authMiddleware, allowRoles("admin", "editor"), BlogPostController.create);
 router.put("/:id", authMiddleware, allowRoles("admin", "editor"), BlogPostController.update);

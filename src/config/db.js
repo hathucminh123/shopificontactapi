@@ -25,6 +25,8 @@ sequelize
   .catch((err) => console.error("❌ Database connection error:", err));
 
 export default sequelize;
+
+
 // import { Sequelize } from "sequelize";
 // import pg from "pg";
 // import dotenv from "dotenv";

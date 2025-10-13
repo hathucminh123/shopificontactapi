@@ -1,12 +1,34 @@
 import CaseStudy from "../models/caseStudy.model.js";
+import User from "../models/users.model.js";
 
 export const CaseStudyService = {
   async getAll() {
-    return CaseStudy.findAll({ include: ["author"] });
+    return CaseStudy.findAll({
+      include: [
+        { model: User, as: "author", attributes: ["id", "name", "email"] },
+        { model: User, as: "approver", attributes: ["id", "name", "email"] },
+      ],
+      order: [["created_at", "DESC"]],
+    });
   },
 
   async getById(id) {
-    return CaseStudy.findByPk(id, { include: ["author"] });
+    return CaseStudy.findByPk(id, {
+      include: [
+        { model: User, as: "author", attributes: ["id", "name", "email"] },
+        { model: User, as: "approver", attributes: ["id", "name", "email"] },
+      ],
+    });
+  },
+
+  async getBySlug(slug) {
+    return CaseStudy.findOne({
+      where: { slug },
+      include: [
+        { model: User, as: "author", attributes: ["id", "name", "email"] },
+        { model: User, as: "approver", attributes: ["id", "name", "email"] },
+      ],
+    });
   },
 
   async create(data) {
@@ -16,7 +38,8 @@ export const CaseStudyService = {
   async update(id, updates) {
     const item = await CaseStudy.findByPk(id);
     if (!item) throw new Error("Case study not found");
-    return item.update(updates);
+    await item.update(updates);
+    return item;
   },
 
   async delete(id) {

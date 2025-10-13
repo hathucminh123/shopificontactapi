@@ -24,6 +24,10 @@ const Resource = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+     content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
     tag: {
       type: DataTypes.TEXT,
     },
