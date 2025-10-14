@@ -12,7 +12,7 @@ export const socketService = {
   init(server) {
     io = new SocketIOServer(server, {
       cors: {
-        origin: process.env.FRONTEND_URL || "https://vsnr.com", // đổi lại domain thực tế nếu có
+        origin: process.env.FRONTEND_URL || "https://vsnr.com/", // đổi lại domain thực tế nếu có
         methods: ["GET", "POST"],
       },
     });
