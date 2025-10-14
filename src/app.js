@@ -16,6 +16,7 @@ import projectTaskRoutes from "./routes/projectTask.routes.js";
 import projectTeamRoutes from "./routes/projectTeam.routes.js";
 import projectResourceRoutes from "./routes/projectResource.routes.js";
 import "./jobs/sendScheduledEmails.js";
+import chatRoutes from "./routes/chat.routes.js";
 const app = express();
 
 // Middleware
@@ -43,5 +44,8 @@ app.use("/api/projects", projectRoutes);
 app.use("/api", projectTaskRoutes);
 app.use("/api/team", projectTeamRoutes);
 app.use("/api/project-resources", projectResourceRoutes);
+//chat 
+
+app.use("/api/chat", chatRoutes);
 
 export default app;

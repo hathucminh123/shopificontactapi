@@ -10,20 +10,26 @@ import EmailSequence from "./emailSequence.model.js";
 import ResourceDownload from "./resourceDownload.model.js";
 import Contact from "./contact.model.js";
 
-// 🧩 Project-related models
+// 🧩 Project-related
 import Project from "./project.model.js";
 import ProjectTask from "./projectTask.model.js";
 import ProjectTeam from "./projectTeam.model.js";
 import ProjectResource from "./projectResource.model.js";
 
-// 🧩 Đảm bảo import tất cả associations trước khi sync
+// 💬 Chat-related
+import ChatSession from "./chat_sessions.model.js";
+import ChatMessage from "./chat_messages.model.js";
+
 const initDatabase = async () => {
   try {
+    console.log("🔗 Connecting to database...");
     await sequelize.authenticate();
-    console.log("✅ Database connection established");
+    console.log("✅ Connection established successfully.");
 
-    // ⚡ Sequelize sẽ tự xử lý toàn bộ quan hệ nhờ các import ở trên
-    await sequelize.sync({ alter: true }); // hoặc { force: true } nếu reset DB
+    const isDev = process.env.NODE_ENV !== "production";
+    console.log(`🧱 Syncing models (mode: ${isDev ? "alter" : "safe"})...`);
+
+    await sequelize.sync({ alter: isDev }); // alter in dev only
 
     console.log("🧩 All models synchronized successfully!");
   } catch (error) {
@@ -45,5 +51,26 @@ export {
   ProjectTask,
   ProjectTeam,
   ProjectResource,
+  ChatSession,
+  ChatMessage,
+  initDatabase,
+};
+
+export default {
+  sequelize,
+  Role,
+  User,
+  BlogPost,
+  Resource,
+  CaseStudy,
+  EmailSequence,
+  Contact,
+  ResourceDownload,
+  Project,
+  ProjectTask,
+  ProjectTeam,
+  ProjectResource,
+  ChatSession,
+  ChatMessage,
   initDatabase,
 };
