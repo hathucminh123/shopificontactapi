@@ -3,14 +3,22 @@ import { ChatController } from "../controllers/chat.controller.js";
 
 const router = express.Router();
 
-// 🧾 Chat session
-router.post("/start", ChatController.startChat);
-router.get("/", ChatController.getChats);
-router.get("/:id", ChatController.getChatById);
-router.put("/:id/close", ChatController.closeChat);
+// 🧾 Lấy tất cả chat sessions (cho admin)
+router.get("/", ChatController.getAllSessions);
 
-// 💬 Messages
-router.post("/:id/message", ChatController.sendMessage);
-router.get("/:id/messages", ChatController.getMessages);
+// 🔍 Lấy chi tiết 1 session
+router.get("/:id", ChatController.getSessionById);
+
+// 🧾 Tạo session mới (client bắt đầu chat)
+router.post("/start", ChatController.startSession);
+
+// 💬 Gửi tin nhắn (nếu không dùng socket)
+router.post("/:chatId/message", ChatController.sendMessage);
+
+// 📜 Lấy tất cả tin nhắn trong 1 chat session
+router.get("/:chatId/messages", ChatController.getMessages);
+
+// 🚫 Đóng session
+router.put("/:chatId/close", ChatController.closeSession);
 
 export default router;

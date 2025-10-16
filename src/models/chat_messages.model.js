@@ -22,8 +22,18 @@ const ChatMessage = sequelize.define(
     attachments: { type: DataTypes.JSONB },
     is_read: { type: DataTypes.BOOLEAN, defaultValue: false },
     sent_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+    created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+    updated_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   },
-  { tableName: "chat_messages", timestamps: false }
+  {
+    tableName: "chat_messages",
+    timestamps: false,
+    hooks: {
+      beforeUpdate: (msg) => {
+        msg.updated_at = new Date();
+      },
+    },
+  }
 );
 
 ChatSession.hasMany(ChatMessage, { foreignKey: "chat_id", as: "messages" });
