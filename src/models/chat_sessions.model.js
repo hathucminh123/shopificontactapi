@@ -37,6 +37,7 @@ const ChatSession = sequelize.define(
     },
 
     last_message: { type: DataTypes.TEXT },
+    last_attachments: { type: DataTypes.JSONB },
     started_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     ended_at: { type: DataTypes.DATE },
 
