@@ -40,7 +40,7 @@ export const ChatService = {
 
     // cập nhật last_message cho session
     await ChatSession.update(
-      { last_message: message, updatedAt: new Date() },
+      { last_message: message, updated_at: new Date() },
       { where: { id: chat_id } }
     );
 

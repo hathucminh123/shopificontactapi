@@ -26,15 +26,27 @@ export const socketService = {
         console.log(`📥 ${socket.id} joined room ${room}`);
       });
 
-      socket.on("send_message", async (data) => {
-        try {
-          const msg = await ChatService.sendMessage(data);
-          io.to(`chat_${data.chat_id}`).emit("receive_message", msg);
-        } catch (err) {
-          console.error("❌ Error saving message:", err);
-          socket.emit("error_message", { error: "Failed to send message" });
-        }
-      });
+   socket.on("send_message", async (data) => {
+  try {
+    // Tạo tin nhắn mới trong cơ sở dữ liệu
+    const msg = await ChatService.sendMessage(data);
+
+    // Sau khi gửi tin nhắn thành công, cập nhật lại thời gian "updatedAt" của chat session
+    const updatedChatSession = await ChatSession.findOne({
+      where: { id: data.chat_id },
+    });
+
+    // Emit lại tin nhắn và thông tin cập nhật `updatedAt`
+    io.to(`chat_${data.chat_id}`).emit("receive_message", {
+      msg,
+      updatedAt: updatedChatSession.updatedAt, // Thêm updatedAt để client có thông tin mới
+    });
+  } catch (err) {
+    console.error("❌ Error saving message:", err);
+    socket.emit("error_message", { error: "Failed to send message" });
+  }
+});
+
 
       socket.on("leave_room", (payload) => {
         const room =
